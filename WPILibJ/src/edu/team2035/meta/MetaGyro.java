@@ -28,7 +28,7 @@ public class MetaGyro extends Gyro{
         super( channel);
     }
     /**
-     * Gyro constructor with a precreated analog channel object.
+     * Gyro constructor with a procreated analog channel object.
      * Use this constructor when the analog channel needs to be shared. There
      * is no reference counting when an AnalogChannel is passed to the gyro.
      * @param channel The AnalogChannel object that the gyro is connected to.
