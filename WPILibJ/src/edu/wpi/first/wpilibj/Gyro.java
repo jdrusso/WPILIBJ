@@ -152,6 +152,10 @@ public class Gyro extends SensorBase implements PIDSource, ISensor {
             return scaledValue;
         }
     }
+    
+    public double getRate() {
+        return 0;
+    }
 
     /**
      * Set the gyro type based on the sensitivity.
