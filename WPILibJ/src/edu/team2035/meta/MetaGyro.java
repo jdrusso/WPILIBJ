@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Gyro;
  * @author abbottk
  */
 public class MetaGyro extends Gyro{
-     
+    
     public MetaGyro(int slot, int channel) {
         super( slot, channel);
     }
