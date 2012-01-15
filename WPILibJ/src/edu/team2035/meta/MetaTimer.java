@@ -6,23 +6,26 @@ package edu.team2035.meta;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Calendar;
 /**
  *
  * @author abbottk
  */
 public class MetaTimer {
-    private static int seconds;
+    //private static int seconds;
+    private Calendar MetaCal;
     
     public void MetaTimer(){
-        seconds = 0;
+        //seconds = 0;
         MetaLog.addObject(this);
-        MetaTimerTask MetaTask =  new MetaTimerTask();
-        Timer time = new Timer();
-        time.schedule( MetaTask, 0, 10);
+       // MetaTimerTask MetaTask =  new MetaTimerTask();
+       // Timer time = new Timer();
+        //time.schedule( MetaTask, 0, 10);
+        MetaCal = new Calendar();
     }
     
      public String update() {
-            return "" + seconds;
+            return "" + MetaCal.getTimeInMillis();
         }
      
      public String getName() {
@@ -30,18 +33,18 @@ public class MetaTimer {
         return name;
     }
      
-    private class MetaTimerTask extends TimerTask{
+    //private class MetaTimerTask extends TimerTask{
         
-        public MetaTimerTask() {
-            super();
+        //public MetaTimerTask() {
+           // super();
             
-        }
-        public void run(){
-            seconds += 10;
-            
-        }
+        //}
+        //public void run(){
+         //   seconds += 10;
+        //    
+       // }
        
         
-    }
+   // }
     
 }
