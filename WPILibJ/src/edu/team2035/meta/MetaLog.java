@@ -20,30 +20,37 @@ public class MetaLog {
     private static FileConnection MetaFile;
     private static OutputStream MetaOs;
     private static PrintStream MetaPs;
+    private static Thread Meta_Thread;
     
     public static void addObject( Object m ) {
         objects.addElement( m );
     }
-    public static void update () {
+    public synchronized static void update () {
+        
         if(!MetaFileOpen){
             startNewLog();
             addColumn(objects);
-            MetaFileOpen = true;
+            MetaFileOpen = true;            
         }
         Enumeration e = objects.elements();
         int numElements = objects.capacity()-1;
         while( e.hasMoreElements() ){
-            if (e.nextElement() instanceof MetaGyro){
-                MetaPs.print(((MetaGyro) e.nextElement()).update());
+            Object MetaEnum = e.nextElement();
+            if (MetaEnum instanceof MetaGyro){
+                MetaPs.print(((MetaGyro) MetaEnum).update());
+            }
+            
+            if (MetaEnum instanceof MetaTimer){
+                MetaPs.print(((MetaTimer) MetaEnum).update());
             }
             if(numElements > 0){
                 MetaPs.print(",");
                 numElements--;
             }
-            else {
-                MetaPs.print("\n");
-            }
+            
         }
+        MetaPs.print("\n");
+        
     }
     
     public static void startNewLog(){
@@ -77,22 +84,33 @@ public class MetaLog {
     public static void addColumn( Vector MetaObjects){
         Enumeration e = MetaObjects.elements();
         int numElements = MetaObjects.capacity()-1;
+        //MetaPs.println("Help");
         while( e.hasMoreElements() ){
-            if (e.nextElement() instanceof MetaGyro){
-                MetaPs.print(((MetaGyro) e.nextElement()).getName());
+            Object MetaEnum = e.nextElement();
+            if (MetaEnum instanceof MetaGyro){
+                MetaPs.print(((MetaGyro) MetaEnum).getName());
                 if(numElements > 0){
                     MetaPs.print(",");
                     numElements--;
                 }
-                else {
-                    MetaPs.print("\n");
+                
+            }
+            if (MetaEnum instanceof MetaTimer){
+                MetaPs.print(((MetaTimer) MetaEnum).getName());
+                if(numElements > 0){
+                    MetaPs.print(",");
+                    numElements--;
                 }
             }
         }
+        MetaPs.print("\n");
         
     }
     
     public static void close(){
+        MetaFileOpen = false;
+    }
+    public synchronized static void closeLog(){
         try {
             if(MetaFileOpen){   
                 MetaPs.close();
@@ -104,6 +122,34 @@ public class MetaLog {
             
         } catch(IOException e) {
             // TBD
+        }
+    }
+    
+    public static void start(){
+        MetaFileOpen = true;
+        Meta_Thread = new MetaThread();
+        Meta_Thread.run();  
+        
+        
+    }
+    private static class MetaThread extends Thread {     
+
+        public MetaThread () {
+            
+        }
+        public void run() {
+            startNewLog();
+            addColumn(objects);
+            
+            while (MetaFileOpen) {
+                update();
+                //try {
+                    //Thread.sleep(1000);
+                //} catch (InterruptedException e) {
+                //}
+                
+            }
+            closeLog();
         }
     }
     

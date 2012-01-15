@@ -15,6 +15,7 @@ public class MetaGyro extends Gyro{
     
     public MetaGyro(int slot, int channel) {
         super( slot, channel);
+        MetaLog.addObject(this);
     }
 
     /**
@@ -26,6 +27,7 @@ public class MetaGyro extends Gyro{
      */
     public MetaGyro(int channel) {
         super( channel);
+        MetaLog.addObject(this);
     }
     /**
      * Gyro constructor with a precreated analog channel object.
@@ -35,14 +37,19 @@ public class MetaGyro extends Gyro{
      */
     public MetaGyro(AnalogChannel channel) {
         super( channel);
+        MetaLog.addObject(this);
         }
+    
+   
     
     public String getName() {
         String name = "Gyro";
         return name;
     }
     
-    public String update(){
-        return "" + getRate();
+    public synchronized String update(){
+        
+        return "" + getAngle();
+        
     }
 }
