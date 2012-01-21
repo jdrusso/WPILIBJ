@@ -16,12 +16,11 @@ import java.util.Enumeration;
  */
 public class MetaLog {
     
-    private static Vector objects = new Vector( 10 , 1 );
+    private static Vector objects = new Vector( 20 , 1 );
     private static boolean MetaFileOpen = false;
     private static FileConnection MetaFile;
     private static OutputStream MetaOs;
     private static PrintStream MetaPs;
-    private static Thread Meta_Thread;
     
     public static void addObject( Object m ) {
         
@@ -29,12 +28,12 @@ public class MetaLog {
         
     }
     
-    public synchronized static void update () {
+    public synchronized static void update() {
         
         if(!MetaFileOpen){
             
             startNewLog();
-            addColumn(objects);
+            finalizeColumns(objects);
             MetaFileOpen = true; 
             
         }
@@ -91,12 +90,12 @@ public class MetaLog {
             
         } catch(IOException e) {
             
-            // TBD
+            
         }
         
     }
     
-    public static void addColumn( Vector MetaObjects){
+    public static void finalizeColumns( Vector MetaObjects){
         
         Enumeration e = MetaObjects.elements();
         int numElements = MetaObjects.capacity()-1;
@@ -105,7 +104,7 @@ public class MetaLog {
             Object MetaEnum = e.nextElement();
             if (MetaEnum instanceof MetaTimer){
                 
-                MetaPs.print(((MetaTimer) MetaEnum).getName());
+                MetaPs.print(((MetaTimer) MetaEnum).initialize());
                 if(numElements > 0){
                     
                     MetaPs.print(",");
@@ -116,7 +115,7 @@ public class MetaLog {
             }
             if (MetaEnum instanceof MetaGyro){
                 
-                MetaPs.print(((MetaGyro) MetaEnum).getName());
+                MetaPs.print(((MetaGyro) MetaEnum).initialize());
                 if(numElements > 0){
                     
                     MetaPs.print(",");
@@ -132,10 +131,6 @@ public class MetaLog {
         
     }
     
-    public static void close(){
-        
-        MetaFileOpen = false;
-    }
     
     public synchronized static void closeLog(){
         try {
@@ -153,37 +148,6 @@ public class MetaLog {
         } catch(IOException e) {
             
             // TBD
-        }
-    }
-    
-    public static void start(){
-        
-        MetaFileOpen = true;
-        Meta_Thread = new MetaThread();
-        Meta_Thread.run();          
-        
-    }
-    
-    private static class MetaThread extends Thread {     
-
-        public MetaThread () {
-            
-        }
-        
-        public void run() {
-            
-            startNewLog();
-            addColumn(objects);
-            
-            while (MetaFileOpen) {
-                update();
-                //try {
-                    //Thread.sleep(1000);
-                //} catch (InterruptedException e) {
-                //}
-               
-            }
-            closeLog();
         }
     }
     

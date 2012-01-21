@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.Gyro;
  */
 public class MetaGyro extends Gyro{
     
+    private String name = "Gyro";
+    
     public MetaGyro(int slot, int channel) {
         super( slot, channel);
         MetaLog.addObject(this);
@@ -42,12 +44,13 @@ public class MetaGyro extends Gyro{
     
    
     
-    public String getName() {
-        String name = "Gyro";
+    public String initialize() {
+        
         return name;
+    
     }
     
-    public synchronized String update(){
+    public String update(){
         
         return "" + getAngle();
         
