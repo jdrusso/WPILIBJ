@@ -103,17 +103,6 @@ public class MetaLog {
         while( e.hasMoreElements() ){
             
             Object MetaEnum = e.nextElement();
-            if (MetaEnum instanceof MetaGyro){
-                
-                MetaPs.print(((MetaGyro) MetaEnum).getName());
-                if(numElements > 0){
-                    
-                    MetaPs.print(",");
-                    numElements--;
-                    
-                }
-                
-            }
             if (MetaEnum instanceof MetaTimer){
                 
                 MetaPs.print(((MetaTimer) MetaEnum).getName());
@@ -125,6 +114,18 @@ public class MetaLog {
                 }
                 
             }
+            if (MetaEnum instanceof MetaGyro){
+                
+                MetaPs.print(((MetaGyro) MetaEnum).getName());
+                if(numElements > 0){
+                    
+                    MetaPs.print(",");
+                    numElements--;
+                    
+                }
+                
+            }
+            
             
         }
         MetaPs.print("\n");
