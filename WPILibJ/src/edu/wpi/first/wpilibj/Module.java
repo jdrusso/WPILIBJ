@@ -59,7 +59,7 @@ public class Module extends SensorBase {
      * 
      * @param moduleType The type of the module represented.
      * @param moduleNumber The module index within the module type.
-     * @return
+     * @return the module
      */
     public static Module getModule(ModulePresence.ModuleType moduleType, int moduleNumber) {
         if(m_modules[toIndex(moduleType, moduleNumber)] == null) {

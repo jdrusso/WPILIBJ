@@ -12,19 +12,32 @@ import com.sun.cldc.jna.Structure;
 import edu.wpi.first.wpilibj.communication.FRCControl;
 
 /**
- *
  * @author bradmiller
+ * Handles raw data input from the FRC Kinect Server
+ * when used with a Kinect device connected to the Driver Station.
+ * Each time a value is requested the most recent value is returned.
+ * See Getting Started with Microsoft Kinect for FRC and the Kinect
+ * for Windows SDK API reference for more information
+ *
  */
 public class Kinect {
     
     private static Kinect m_instance;
 
+     /**
+     * Gets an instance of the Kinect device
+     *
+     * @return The Kinect.
+     */
     public static synchronized Kinect getInstance() {
         if(m_instance == null)
             m_instance = new Kinect();
         return m_instance;
     }
 
+    /**
+     * A set of 4 coordinates (x,y,z,w) bundled into one object
+     */
     public class Point4 {
         public float x, y, z, w;
 
@@ -351,7 +364,7 @@ public class Kinect {
 
      /**
      * Retrieve the GravityNormal vector from the Kinect device
-     *
+     * The w value returned from this method is always 0
      * @return The GravityNormal vector
      */
     public Point4 getGravityNormal() {
@@ -373,7 +386,7 @@ public class Kinect {
 
      /**
      * Query the position of the detected skeleton
-     *
+     * The w value returned from this method is always 1
      * @return The position of the skeleton
      */
     public Point4 getPosition() {
