@@ -13,7 +13,9 @@ import com.sun.cldc.jna.Pointer;
 import com.sun.cldc.jna.Structure;
 import com.sun.cldc.jna.TaskExecutor;
 import com.sun.cldc.jna.ptr.IntByReference;
+import com.sun.squawk.microedition.io.FileConnection;
 import edu.wpi.first.wpilibj.util.BoundaryException;
+import java.util.Vector;
 
 /**
  * Class for interfacing with the NIVision libraries
@@ -530,7 +532,32 @@ public class NIVision {
     //IMAQ_FUNC int           IMAQ_STDCALL imaqSimpleDistance(Image* dest, Image* source, const StructuringElement* structuringElement);
     //IMAQ_FUNC int           IMAQ_STDCALL imaqSizeFilter(Image* dest, Image* source, int connectivity8, int erosions, SizeType keepSize, const StructuringElement* structuringElement);
     //IMAQ_FUNC int           IMAQ_STDCALL imaqSkeleton(Image* dest, Image* source, SkeletonMethod method);
-
+    
+        
+    /**
+     * Convex hull operation
+     */
+    private static final BlockingFunction imaqConvexHullFn = NativeLibrary.getDefaultInstance().getBlockingFunction("imaqConvexHull");
+    static { imaqConvexHullFn.setTaskExecutor(taskExecutor); }
+    
+    public static void convexHull(Pointer dest, Pointer source, int connectivity8) throws NIVisionException {
+        assertCleanStatus(imaqConvexHullFn.call3(dest.address().toUWord().toPrimitive(),
+                                                source.address().toUWord().toPrimitive(),
+                                                connectivity8));
+    }
+    
+    /**
+     * size filter function
+     */
+    private static final BlockingFunction imaqSizeFilterFn = NativeLibrary.getDefaultInstance().getBlockingFunction("imaqSizeFilter");
+    static { imaqSizeFilterFn.setTaskExecutor(taskExecutor); }
+    
+    public static void sizeFilter(Pointer dest, Pointer source, boolean connectivity8, int erosions, boolean keepLarger) throws NIVisionException {
+        assertCleanStatus(imaqSizeFilterFn.call6(dest.address().toUWord().toPrimitive(),
+                                                source.address().toUWord().toPrimitive(),
+                                                connectivity8 ? 1 : 0, erosions, keepLarger ? 0 : 1, 0));
+    }
+    
     //============================================================================
     //  Logical functions
     //============================================================================
@@ -599,6 +626,28 @@ public class NIVision {
     }
 
     //IMAQ_FUNC int IMAQ_STDCALL imaqParticleFilter4(Image* dest, Image* source, const ParticleFilterCriteria2* criteria, int criteriaCount, const ParticleFilterOptions2* options, const ROI* roi, int* numParticles);
+
+    private static final BlockingFunction imaqParticleFilter4Fn = NativeLibrary.getDefaultInstance().getBlockingFunction("imaqParticleFilter4");
+    
+    public static int particleFilter(Pointer dest, Pointer source, CriteriaCollection collection) throws NIVisionException {
+        Pointer particleFilterOptions = new Pointer(16);
+        particleFilterOptions.setInt(0, 0);
+        particleFilterOptions.setInt(4, 0);
+        particleFilterOptions.setInt(8, 0);
+        particleFilterOptions.setInt(12, 1);
+        IntByReference i = new IntByReference(0);
+        assertCleanStatus(imaqParticleFilter4Fn.call7(dest.address().toUWord().toPrimitive(),   // dest image
+                                                    source.address().toUWord().toPrimitive(),   // source image
+                                                    collection.getCriteriaArray().address().toUWord().toPrimitive(),  // array of criteria
+                                                    collection.getNumberOfCriteria(),           // number of criteria in the array
+                                                    particleFilterOptions.address().toUWord().toPrimitive(),  // particle filter options
+                                                    0,                                          // Region of interest
+                                                    i.getPointer().address().toUWord().toPrimitive()));  // returned number of particles
+        int numberOfParticles = i.getValue();
+        i.free();
+        particleFilterOptions.free();
+        return numberOfParticles;
+    }
 
     //============================================================================
     //  Analytic Geometry functions

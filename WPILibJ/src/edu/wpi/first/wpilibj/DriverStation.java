@@ -500,7 +500,7 @@ public class DriverStation implements IInputOutput {
     /**
      * Gets the default dashboard packer for sending high priority user data to
      * a dashboard receiver. This instance stays around even after a call to
-     * {@link #setDashboardPackerHigh} changes which packer is in use.
+     * {@link #setDashboardPackerToUseHigh} changes which packer is in use.
      *
      * @return the default Dashboard object; it may be idle
      */
@@ -532,7 +532,7 @@ public class DriverStation implements IInputOutput {
     /**
      * Gets the default dashboard packer for sending low priority user data to
      * a dashboard receiver. This instance stays around even after a call to
-     * {@link #setDashboardPackerLow} changes which packer is in use.
+     * {@link #setDashboardPackerToUseLow} changes which packer is in use.
      *
      * @return the default Dashboard object; it may be idle
      */

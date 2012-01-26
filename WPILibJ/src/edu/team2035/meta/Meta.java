@@ -1,16 +1,16 @@
-/*
-2
- * To change this template, choose Tools | Templates
-3
- * and open the template in the editor.
-4
- */
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) FIRST Team 2035, 2012. All Rights Reserved.                  */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package edu.team2035.meta;
 import java.util.Vector;
 import java.util.Enumeration;
 /**
  *
- * @author Robot
+ * @author Team 2035 Programmers
  */
 public class Meta  {
     private static Vector objects = new Vector( 10 , 1 );

@@ -116,4 +116,65 @@ public class BinaryImage extends MonoImage {
             colorTable.free();
         }
     }
+    
+    /**
+     * removeSmallObjects filters particles based on their size.
+     * The algorithm erodes the image a specified number of times and keeps the
+     * particles from the original image that remain in the eroded image.
+     * @param connectivity8 true to use connectivity-8 or false for connectivity-4 to determine
+     * whether particles are touching. For more information about connectivity, see Chapter 9,
+     * Binary Morphology, in the NI Vision Concepts manual.
+     * @param erosions the number of erosions to perform
+     * @return a BinaryImage after applying the filter
+     * @throws NIVisionException 
+     */
+    public BinaryImage removeSmallObjects(boolean connectivity8, int erosions) throws NIVisionException {
+        BinaryImage result = new BinaryImage();
+        try {
+            NIVision.sizeFilter(result.image, image, connectivity8, erosions, true);
+        } catch (NIVisionException ex) {
+            result.free();
+            throw ex;
+        }
+        return result;
+    }
+    
+   /**
+     * removeLargeObjects filters particles based on their size.
+     * The algorithm erodes the image a specified number of times and discards the
+     * particles from the original image that remain in the eroded image.
+     * @param connectivity8 true to use connectivity-8 or false for connectivity-4 to determine
+     * whether particles are touching. For more information about connectivity, see Chapter 9,
+     * Binary Morphology, in the NI Vision Concepts manual.
+     * @param erosions the number of erosions to perform
+     * @return a BinaryImage after applying the filter
+     * @throws NIVisionException 
+     */
+    public BinaryImage removeLargeObjects(boolean connectivity8, int erosions) throws NIVisionException {
+        BinaryImage result = new BinaryImage();
+        try {
+            NIVision.sizeFilter(result.image, image, connectivity8, erosions, false);
+        } catch (NIVisionException ex) {
+            result.free();
+            throw ex;
+        }
+        return result;
+    }
+    
+    public BinaryImage convexHull(boolean connectivity8) throws NIVisionException {
+        BinaryImage result = new BinaryImage();
+        try {
+            NIVision.convexHull(result.image, image, connectivity8 ? 1 : 0);
+        } catch (NIVisionException ex) {
+            result.free();
+            throw ex;
+        }
+        return result;
+    }
+    
+    public BinaryImage particleFilter(CriteriaCollection criteria) throws NIVisionException {
+        BinaryImage result = new BinaryImage();
+        NIVision.particleFilter(result.image, image, criteria);
+        return result;
+    }
 }
