@@ -52,6 +52,11 @@ public class MetaLog {
                 MetaPs.print(((MetaTimer) MetaEnum).update());
                 
             }
+            if (MetaEnum instanceof MetaCommandLog){
+                
+                MetaPs.print(((MetaCommandLog) MetaEnum).update());
+                
+            }
             if(numElements > 0){
                 
                 MetaPs.print(",");
@@ -116,6 +121,17 @@ public class MetaLog {
             if (MetaEnum instanceof MetaGyro){
                 
                 MetaPs.print(((MetaGyro) MetaEnum).initialize());
+                if(numElements > 0){
+                    
+                    MetaPs.print(",");
+                    numElements--;
+                    
+                }
+                
+            }
+            if (MetaEnum instanceof MetaCommandLog){
+                
+                MetaPs.print(((MetaCommandLog) MetaEnum).initialize());
                 if(numElements > 0){
                     
                     MetaPs.print(",");
