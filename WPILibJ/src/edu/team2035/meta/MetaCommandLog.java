@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class MetaCommandLog {
 
     private Subsystem MetaSub;
+    private static String commandName;
     
     public MetaCommandLog(Subsystem s){
         MetaSub = s;
@@ -28,8 +29,12 @@ public class MetaCommandLog {
 
     public String update(){
 
-        return MetaSub.getCurrentCommand().getName();
+        return commandName;
 
+    }
+    
+    public static synchronized void setCommand(String s){
+        commandName = s;
     }
 
 
