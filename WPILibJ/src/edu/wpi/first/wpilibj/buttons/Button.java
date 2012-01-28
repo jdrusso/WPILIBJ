@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboardData;
  */
 public abstract class Button implements SmartDashboardData {
 
+    private static boolean pressedOnce;
     /**
      * Returns whether or not the button is pressed.
      *
@@ -44,6 +45,10 @@ public abstract class Button implements SmartDashboardData {
      */
     private boolean grab() {
         return get() || (table != null && table.isConnected() && table.getBoolean("pressed", false));
+    }
+    
+    public static boolean getPressedOnce(){
+        return pressedOnce;
     }
 
     /**
@@ -97,19 +102,19 @@ public abstract class Button implements SmartDashboardData {
     
     public void whenDoublePressed(final Command command) {
         new ButtonScheduler() {
-            
-            boolean pressedOnce = grab();
-            boolean pressedTwice = false;
+           boolean pressed = grab();
             private Timer time;
 
             public void execute() {
-                if (grab() && !pressedOnce) {
+                if (grab() && !pressed) {
                     pressedOnce = true;
+                    pressed = true;
                     time.start();
 
                 } else {
                     if (grab() && time.get() < 1) {
                         pressedOnce = false;
+                        pressed = false;
                         time.stop();
                         time.reset();
                         command.start();
