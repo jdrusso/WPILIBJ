@@ -101,23 +101,21 @@ public abstract class Button implements SmartDashboardData {
     }
     
     public void whenDoublePressed(final Command command) {
-        new ButtonScheduler() {
-           boolean pressed = grab();
+    new ButtonScheduler() {
+
+            boolean pressed = grab();
            boolean released = false;
-            private Timer time;
+            private Timer time = new Timer();
 
             public void execute() {
-                if (grab() && !pressed) {
-                    pressedOnce = true;
-                    pressed = true;
-                    time.start();
-
-                } 
-                else if(!grab() && pressed){
-                    released = true;
-                }
-                else {
-                    if (grab() && time.get() < 1 && released) {
+                if (grab()){
+                    if(!pressed){
+                        pressedOnce = true;
+                        pressed = true;
+                        time.start();
+                    }
+                    
+                    if (time.get() < 2 && released) {
                         pressedOnce = false;
                         pressed = false;
                         released = false;
@@ -125,10 +123,24 @@ public abstract class Button implements SmartDashboardData {
                         time.reset();
                         command.start();
                     }
+
+                }else{
+                    if(pressed){
+                        released = true;
+                        pressed = false;
+                    }
+                    if(time.get() > 2 && released){
+                        pressedOnce = false;
+                        released = false;
+                        time.stop();
+                        time.reset();
+                    }
                 }
+                
             }
         }.start();
-    }
+    }    
+    
 
     /**
      * Starts the command when the button is released
