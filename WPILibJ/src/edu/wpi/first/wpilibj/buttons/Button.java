@@ -7,6 +7,7 @@
 
 package edu.wpi.first.wpilibj.buttons;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -88,6 +89,30 @@ public abstract class Button implements SmartDashboardData {
                     if (pressedLast) {
                         pressedLast = false;
                         command.cancel();
+                    }
+                }
+            }
+        }.start();
+    }
+    
+    public void whenDoublePressed(final Command command) {
+        new ButtonScheduler() {
+            
+            boolean pressedOnce = grab();
+            boolean pressedTwice = false;
+            private Timer time;
+
+            public void execute() {
+                if (grab() && !pressedOnce) {
+                    pressedOnce = true;
+                    time.start();
+
+                } else {
+                    if (grab() && time.get() < 1) {
+                        pressedOnce = false;
+                        time.stop();
+                        time.reset();
+                        command.start();
                     }
                 }
             }
