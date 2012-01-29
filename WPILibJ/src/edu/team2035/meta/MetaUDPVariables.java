@@ -40,17 +40,17 @@ public class MetaUDPVariables {
        variables = new Hashtable(); // Hastable of key/value pairs to store values
        numberOfConnections = 0;
        
-       new Thread() {
-           public void run() {
+       //new Thread() {
+        //   public void run() {
                acceptConnections();
-           }
-       }.start();   
+        //   }
+       //}.start();   
        
        new Thread() {
            public void run() {
                update();
                try {
-                    Thread.sleep(200);
+                    //Thread.sleep(200);
                 } catch (InterruptedException ex1) {
                     // TBD: what to do here?
                 }
@@ -100,22 +100,26 @@ public class MetaUDPVariables {
         UDPDatagramConnection server = null;
 
         // Open the server
-        while (true) {
+        //while (true) {
             try {
                 server = (UDPDatagramConnection)Connector.open("datagram://:" + PORT);
+                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3, 1, "Listening on " + server.getLocalAddress());
+                DriverStationLCD.getInstance().updateLCD();
                 connections.addElement(server);
                 numberOfConnections++;
                 break;
             } catch (IOException ex) {
                 DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3, 1, "IOException in acceptConnections!");
+                DriverStationLCD.getInstance().updateLCD();
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex1) {
                     DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser4, 1, "InterruptedException in acceptConnections!");
+                    DriverStationLCD.getInstance().updateLCD();
                     // TBD: what to do here?
                 }
             }
-        }
+        //}
 
     }
     
