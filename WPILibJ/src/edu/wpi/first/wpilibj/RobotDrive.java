@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.parsing.IUtility;
  */
 public class RobotDrive implements MotorSafety, IUtility {
 
-    protected MotorSafetyHelper m_safetyHelper;
+    protected static MotorSafetyHelper m_safetyHelper;
 
     /**
      * The location of a motor on the robot for the purpose of driving
@@ -630,6 +630,9 @@ public class RobotDrive implements MotorSafety, IUtility {
                 ((PWM) m_rearRightMotor).free();
             }
         }
+    }
+    public static void feed(){
+        m_safetyHelper.feed();
     }
 
     public void setExpiration(double timeout) {

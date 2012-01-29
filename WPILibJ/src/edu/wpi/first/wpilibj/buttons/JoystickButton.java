@@ -33,11 +33,11 @@ public class JoystickButton extends Button {
      * @return The value of the joystick button
      */
     public boolean get() {
-        //if(!Button.getPressedOnce()){
+        if(!Button.getPressedTwice()){
         return m_joystick.getRawButton(m_buttonNumber);
-        ///}
-        ///else{
-          ///return false;
-        ///}
+        }
+        else{
+            return false;
+        }
     }
 }

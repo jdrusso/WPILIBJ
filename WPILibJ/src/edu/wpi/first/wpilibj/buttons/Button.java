@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboardData;
  */
 public abstract class Button implements SmartDashboardData {
 
-    private static boolean pressedOnce;
+    private static boolean pressedTwice;
     /**
      * Returns whether or not the button is pressed.
      *
@@ -47,8 +47,8 @@ public abstract class Button implements SmartDashboardData {
         return get() || (table != null && table.isConnected() && table.getBoolean("pressed", false));
     }
     
-    public static boolean getPressedOnce(){
-        return pressedOnce;
+    public static boolean getPressedTwice(){
+        return pressedTwice;
     }
 
     /**
@@ -105,20 +105,24 @@ public abstract class Button implements SmartDashboardData {
 
             boolean pressed = grab();
            boolean released = false;
+           boolean releasedTwice = false;
             private Timer time = new Timer();
 
             public void execute() {
                 if (grab()){
                     if(!pressed){
-                        pressedOnce = true;
                         pressed = true;
-                        time.start();
                     }
                     
-                    if (time.get() < 2 && released) {
-                        pressedOnce = false;
+                    if(released){
+                        pressedTwice = true;
+                    }
+                    
+                    if (time.get() < 2 && releasedTwice) {
+                        pressedTwice = false;
                         pressed = false;
                         released = false;
+                        releasedTwice = false;
                         time.stop();
                         time.reset();
                         command.start();
@@ -127,10 +131,13 @@ public abstract class Button implements SmartDashboardData {
                 }else{
                     if(pressed){
                         released = true;
-                        pressed = false;
+                        time.start();
+                    }
+                    if(pressedTwice){
+                        releasedTwice = true;
                     }
                     if(time.get() > 2 && released){
-                        pressedOnce = false;
+                        pressedTwice = false;
                         released = false;
                         time.stop();
                         time.reset();
