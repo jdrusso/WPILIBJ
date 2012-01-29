@@ -14,6 +14,7 @@ import java.util.Vector;
 import javax.microedition.io.Connector;
 import javax.microedition.io.Datagram;
 import javax.microedition.io.UDPDatagramConnection;
+import edu.wpi.first.wpilibj.DriverStationLCD;
 
 
 /** MetaUDPVariables
@@ -25,6 +26,7 @@ public class MetaUDPVariables {
 
     Vector connections;
     Hashtable variables;
+    int numberOfConnections;
 
     static final int PORT = 7000;  // UDP connection port
     
@@ -36,6 +38,7 @@ public class MetaUDPVariables {
     {
        connections = new Vector(); // Vector of open connections.
        variables = new Hashtable(); // Hastable of key/value pairs to store values
+       numberOfConnections = 0;
        
        new Thread() {
            public void run() {
@@ -46,6 +49,11 @@ public class MetaUDPVariables {
        new Thread() {
            public void run() {
                update();
+               try {
+                    Thread.sleep(200);
+                } catch (InterruptedException ex1) {
+                    // TBD: what to do here?
+                }
            }
        }.start(); 
     }
@@ -96,16 +104,24 @@ public class MetaUDPVariables {
             try {
                 server = (UDPDatagramConnection)Connector.open("datagram://:" + PORT);
                 connections.addElement(server);
+                numberOfConnections++;
                 break;
             } catch (IOException ex) {
+                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3, 1, "IOException in acceptConnections!");
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex1) {
+                    DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser4, 1, "InterruptedException in acceptConnections!");
                     // TBD: what to do here?
                 }
             }
         }
 
+    }
+    
+    public int getConnections(){
+        
+        return numberOfConnections;
     }
     
     /**
@@ -131,15 +147,42 @@ public class MetaUDPVariables {
 
                     String message = g.readUTF();
                     StringTokenizer st = new StringTokenizer(message, " \n\r\t\f");
-                    if (st.tokenCount == 3)
+                    if (st.tokenCount == 9)
                     {
-                        String cmd = st.nextToken();
-                        if ((cmd.toLowerCase().compareTo("float") == 0))
+//                        String cmd = st.nextToken();
+//                        if ((cmd.toLowerCase().compareTo("float") == 0))
+//                        {
+//                            String v = st.nextToken();
+//                            float f = Float.valueOf(st.nextToken()).floatValue();
+//                            newVariableValue(v, new Float(f));
+//                        }
+                    
+                        /**values are passed through UDP in the format
+                         * (Distance, x1, y1, x2, y2, x3, y3, x4, y4)
+                         * This handles that using the switch statement for each
+                         * different value to store them in a hashtable
+                         */
+                        for (int i = 0; i < 9; i++)
                         {
-                            String v = st.nextToken();
-                            float f = Float.valueOf(st.nextToken()).floatValue();
-                            newVariableValue(v, new Float(f));
+                            String value = st.nextToken();
+                            Float temp = Float.valueOf(value);
+                            float f = Float.valueOf(value).floatValue();
+                            switch (i)
+                            {
+                                case 0: newVariableValue("range", temp); break;
+                                case 1: newVariableValue("x1", temp); break;
+                                case 2: newVariableValue("y1", temp); break;
+                                case 3: newVariableValue("x2", temp); break;
+                                case 4: newVariableValue("y2", temp); break;
+                                case 5: newVariableValue("x3", temp); break;
+                                case 6: newVariableValue("y3", temp); break;
+                                case 7: newVariableValue("x4", temp); break;
+                                case 8: newVariableValue("y4", temp); break;
+                            }
                         }
+                                    
+                            
+
                         
                         // TODO: If handling other data types than floats,
                         // those would be done here.
