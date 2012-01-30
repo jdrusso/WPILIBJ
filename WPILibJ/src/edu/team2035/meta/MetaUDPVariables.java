@@ -49,11 +49,11 @@ public class MetaUDPVariables {
        new Thread() {
            public void run() {
                update();
-               try {
-                    //Thread.sleep(200);
-                } catch (InterruptedException ex1) {
-                    // TBD: what to do here?
-                }
+//               try {
+//                    //Thread.sleep(200);
+//                } catch (InterruptedException ex1) {
+//                    // TBD: what to do here?
+//                }
            }
        }.start(); 
     }
@@ -107,7 +107,6 @@ public class MetaUDPVariables {
                 DriverStationLCD.getInstance().updateLCD();
                 connections.addElement(server);
                 numberOfConnections++;
-                break;
             } catch (IOException ex) {
                 DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3, 1, "IOException in acceptConnections!");
                 DriverStationLCD.getInstance().updateLCD();
