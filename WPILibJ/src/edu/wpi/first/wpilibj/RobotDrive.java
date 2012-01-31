@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj.parsing.IUtility;
 public class RobotDrive implements MotorSafety, IUtility {
 
     protected static MotorSafetyHelper m_safetyHelper;
+    private static double LeftSideOutput;
+    private static double RightSideOutput;
 
     /**
      * The location of a motor on the robot for the purpose of driving
@@ -174,6 +176,18 @@ public class RobotDrive implements MotorSafety, IUtility {
 		drive(0, 0);
     }
 
+    public String getLeftOutputs(){
+        
+        return "" + this.LeftSideOutput;
+
+    }
+    
+    public String getRightOutputs(){
+        
+        return "" + this.RightSideOutput;
+
+    }
+    
     /**
      * Drive the motors at "speed" and "curve".
      *
@@ -510,6 +524,10 @@ public class RobotDrive implements MotorSafety, IUtility {
      * @param rightOutput The speed to send to the right side of the robot.
      */
     public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
+        
+        this.LeftSideOutput = leftOutput;
+        this.RightSideOutput = rightOutput;
+        
         if (m_rearLeftMotor == null || m_rearRightMotor == null) {
             throw new NullPointerException("Null motor provided");
         }

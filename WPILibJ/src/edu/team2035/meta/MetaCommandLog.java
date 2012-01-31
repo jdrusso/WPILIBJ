@@ -12,29 +12,44 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class MetaCommandLog {
 
-    private Subsystem MetaSub;
-    private static String commandName;
+    private  String Subsystem;
+    private  String commandName;
+    private  String inputs;
+    private  String inputValues;    
+    private  String outputs;
+    private  String outputValues;
     
-    public MetaCommandLog(Subsystem s){
-        MetaSub = s;
+    public MetaCommandLog(String sub, String input, String output){
         MetaLog.addObject(this);
+        Subsystem = sub;
+        inputs = input;
+        outputs = output;
     }
 
     public String initialize(){
 
 
-        return MetaSub.getName();
+        return Subsystem + "," + inputs + "," + outputs;
     
     }
 
     public String update(){
 
-        return commandName;
+        return commandName + "," + inputValues + "," +outputValues;
 
     }
     
-    public static synchronized void setCommand(String s){
+    public synchronized void setCommand(String s){
         commandName = s;
+    }
+    
+    
+    public synchronized void setInputs(String inputValue){
+        inputValues = inputValue;
+    }
+    
+    public synchronized void setOutputs(String outputValue){
+        outputValues = outputValue;
     }
 
 

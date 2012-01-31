@@ -136,7 +136,7 @@ public abstract class Button implements SmartDashboardData {
                     if(pressedTwice){
                         releasedTwice = true;
                     }
-                    if(time.get() > 2 && released){
+                    if(time.get() > 2 && (released || releasedTwice)){
                         pressedTwice = false;
                         released = false;
                         time.stop();
