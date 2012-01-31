@@ -7,15 +7,19 @@
 
 package edu.team2035.meta;
 
+import com.sun.squawk.io.BufferedReader;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 import javax.microedition.io.Connector;
 import javax.microedition.io.Datagram;
-import javax.microedition.io.UDPDatagramConnection;
+import javax.microedition.io.SocketConnection;
+import javax.microedition.io.StreamConnection;
+import javax.microedition.io.ServerSocketConnection;
 import edu.wpi.first.wpilibj.DriverStationLCD;
-
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /** MetaUDPVariables
  * For receiving variables from the dashboard.
@@ -27,6 +31,11 @@ public class MetaUDPVariables {
     Vector connections;
     Hashtable variables;
     int numberOfConnections;
+    InputStream dashboardStream;
+    InputStreamReader reader;
+    BufferedReader buffRead;
+    Thread connect;
+    ServerSocketConnection server;
 
     static final int PORT = 7000;  // UDP connection port
     
@@ -36,15 +45,18 @@ public class MetaUDPVariables {
      */
     public MetaUDPVariables()
     {
+       server = null;
        connections = new Vector(); // Vector of open connections.
        variables = new Hashtable(); // Hastable of key/value pairs to store values
        numberOfConnections = 0;
+       buffRead = null;
        
-       //new Thread() {
-        //   public void run() {
+       connect = new Thread() {
+           public void run() {
                acceptConnections();
-        //   }
-       //}.start();   
+           }
+       };
+       connect.start();
        
        new Thread() {
            public void run() {
@@ -97,29 +109,33 @@ public class MetaUDPVariables {
      * Accepts UDP connections to the robot on the specified port.
      */
     private synchronized void acceptConnections() {
-        UDPDatagramConnection server = null;
 
         // Open the server
-        //while (true) {
+        while (server == null) {
             try {
-                server = (UDPDatagramConnection)Connector.open("datagram://:" + PORT);
+                server = (ServerSocketConnection)Connector.open("socket://:1130");
+                SocketConnection connected = (SocketConnection)server.acceptAndOpen();
+                dashboardStream = connected.openInputStream();
                 DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3, 1, "Listening on " + server.getLocalAddress());
                 DriverStationLCD.getInstance().updateLCD();
                 connections.addElement(server);
                 numberOfConnections++;
+                reader = new InputStreamReader(dashboardStream);
+                buffRead = new BufferedReader(reader);
             } catch (IOException ex) {
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3, 1, "IOException in acceptConnections!");
-                DriverStationLCD.getInstance().updateLCD();
+                
+                ex.printStackTrace();
                 try {
+                    
                     Thread.sleep(2000);
                 } catch (InterruptedException ex1) {
+                    
                     DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser4, 1, "InterruptedException in acceptConnections!");
                     DriverStationLCD.getInstance().updateLCD();
                     // TBD: what to do here?
                 }
             }
-        //}
-
+        }
     }
     
     public int getConnections(){
@@ -134,21 +150,17 @@ public class MetaUDPVariables {
      */
     public synchronized void update()
     {
-        Enumeration e = connections.elements();
-
-        while( e.hasMoreElements() )
-        {
-            Object Enum = e.nextElement();
-            if (Enum instanceof UDPDatagramConnection)
+        //Enumeration e = connections.elements();
+        //while( e.hasMoreElements() )
+        //{
+            //Object Enum = e.nextElement();
+            //if (Enum instanceof SocketConnection)
+            //{
+            if(buffRead != null)
             {
-            
                 try {
-                    UDPDatagramConnection conn = (UDPDatagramConnection)Enum;
-
-                    Datagram g = conn.newDatagram(1024);
-                    conn.receive(g);  
-
-                    String message = g.readUTF();
+                    
+                    String message = buffRead.readLine();
                     StringTokenizer st = new StringTokenizer(message, " \n\r\t\f");
                     if (st.tokenCount == 9)
                     {
@@ -195,7 +207,8 @@ public class MetaUDPVariables {
                     // TBD: what to do?
                 }
             }
-        }
+            //}
+        //}
         
     }
     
