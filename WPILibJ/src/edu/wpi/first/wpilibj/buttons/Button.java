@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboardData;
  */
 public abstract class Button implements SmartDashboardData {
 
-    private static boolean pressedTwice;
+    private boolean pressedTwice;
     /**
      * Returns whether or not the button is pressed.
      *
@@ -47,7 +47,7 @@ public abstract class Button implements SmartDashboardData {
         return get() || (table != null && table.isConnected() && table.getBoolean("pressed", false));
     }
     
-    public static boolean getPressedTwice(){
+    public boolean getPressedTwice(){
         return pressedTwice;
     }
 
