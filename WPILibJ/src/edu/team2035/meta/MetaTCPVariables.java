@@ -76,7 +76,7 @@ public class MetaTCPVariables {
      * @param s called the key, this is String such as "positionx"
      * @param o called the value, this is an Object that stores its content
      */
-    private synchronized void newVariableValue(String s, Object o)
+    private void newVariableValue(String s, Object o)
     {
         variables.put(s, o);
     }
@@ -96,7 +96,7 @@ public class MetaTCPVariables {
      * @param s called the key, this is the String identifer of the object of interest such as "rectanglelength" 
      * @return a float value of the object or -99 if there is an error.
      */
-    public synchronized float getVariableFloatValue(String s)
+    public float getVariableFloatValue(String s)
     {
         Object o = variables.get(s);
         if (o instanceof Float)
@@ -109,15 +109,17 @@ public class MetaTCPVariables {
     /**
      * Accepts UDP connections to the robot on the specified port.
      */
-    private synchronized void acceptConnections() {
+    private void acceptConnections() {
 
         // Open the server
         while (true) {
             try {
-                server = (ServerSocketConnection) Connector.open("socket://:" + PORT);
+                server = (ServerSocketConnection)Connector.open("socket://:" + PORT);
+                System.out.println("Attempted to Connect");
+                numberOfConnections++;
                 break;
             } catch (IOException ex) {
-                ex.printStackTrace();
+                //ex.printStackTrace();
                 try {
                     
                     Thread.sleep(2000);
@@ -131,8 +133,8 @@ public class MetaTCPVariables {
             while (true) {
                 // Wait for a connection
                 socket = (SocketConnection) server.acceptAndOpen();
-
-                socket.setSocketOption(SocketConnection.LINGER, 0);
+                System.out.println("Accepted and opened ;)");
+                socket.setSocketOption(SocketConnection.KEEPALIVE, 1);
             }
         } catch (IOException ex) {
             System.out.println("MetaTCP: LOST SERVER!");
@@ -141,8 +143,9 @@ public class MetaTCPVariables {
             
             dashboardStream = socket.openInputStream();
             DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3, 1, "Listening on " + server.getLocalAddress());
+            System.out.println("InputStream established");
         } catch (IOException ex){
-            
+            System.out.println("input stream open failed - shit.");
         }
         DriverStationLCD.getInstance().updateLCD();
         connections.addElement(server);
@@ -162,7 +165,7 @@ public class MetaTCPVariables {
      * It is assumed that only one key is updated per UDP datagram.
      * This only handles float variables at the present time.
      */
-    public synchronized void update()
+    public void update()
     {
         //Enumeration e = connections.elements();
         //while( e.hasMoreElements() )
@@ -175,7 +178,10 @@ public class MetaTCPVariables {
                 try {
                     
                     String message = buffRead.readLine();
+                    
                     StringTokenizer st = new StringTokenizer(message, " \n\r\t\f");
+                    
+                    System.out.println(st.tokenCount);
                     if (st.tokenCount == 9)
                     {
 //                        String cmd = st.nextToken();
