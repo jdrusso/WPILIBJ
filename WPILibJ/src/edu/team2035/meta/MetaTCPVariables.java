@@ -21,12 +21,12 @@ import edu.wpi.first.wpilibj.DriverStationLCD;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-/** MetaUDPVariables
+/** MetaTCPVariables
  * For receiving variables from the dashboard.
  *
  * @author Team 2035 Programmers
  */
-public class MetaUDPVariables {
+public class MetaTCPVariables {
 
     Vector connections;
     Hashtable variables;
@@ -36,14 +36,15 @@ public class MetaUDPVariables {
     BufferedReader buffRead;
     Thread connect;
     ServerSocketConnection server;
+    SocketConnection socket;
 
-    static final int PORT = 7000;  // UDP connection port
+    static final int PORT = 1130;  // TCP listen connection port
     
     /**
      * Starting the constructor causes it to accept new connections and
      * the open connections will be read for data.
      */
-    public MetaUDPVariables()
+    public MetaTCPVariables()
     {
        server = null;
        connections = new Vector(); // Vector of open connections.
@@ -111,31 +112,44 @@ public class MetaUDPVariables {
     private synchronized void acceptConnections() {
 
         // Open the server
-        while (server == null) {
+        while (true) {
             try {
-                server = (ServerSocketConnection)Connector.open("socket://:1130");
-                SocketConnection connected = (SocketConnection)server.acceptAndOpen();
-                dashboardStream = connected.openInputStream();
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3, 1, "Listening on " + server.getLocalAddress());
-                DriverStationLCD.getInstance().updateLCD();
-                connections.addElement(server);
-                numberOfConnections++;
-                reader = new InputStreamReader(dashboardStream);
-                buffRead = new BufferedReader(reader);
+                server = (ServerSocketConnection) Connector.open("socket://:" + PORT);
+                break;
             } catch (IOException ex) {
-                
                 ex.printStackTrace();
                 try {
                     
                     Thread.sleep(2000);
                 } catch (InterruptedException ex1) {
-                    
-                    DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser4, 1, "InterruptedException in acceptConnections!");
-                    DriverStationLCD.getInstance().updateLCD();
-                    // TBD: what to do here?
+                    ex1.printStackTrace();
                 }
             }
         }
+
+        try {
+            while (true) {
+                // Wait for a connection
+                socket = (SocketConnection) server.acceptAndOpen();
+
+                socket.setSocketOption(SocketConnection.LINGER, 0);
+            }
+        } catch (IOException ex) {
+            System.out.println("MetaTCP: LOST SERVER!");
+        }
+        try {
+            
+            dashboardStream = socket.openInputStream();
+            DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3, 1, "Listening on " + server.getLocalAddress());
+        } catch (IOException ex){
+            
+        }
+        DriverStationLCD.getInstance().updateLCD();
+        connections.addElement(server);
+        numberOfConnections++;
+            
+        buffRead = new BufferedReader(new InputStreamReader(dashboardStream));
+                   
     }
     
     public int getConnections(){
