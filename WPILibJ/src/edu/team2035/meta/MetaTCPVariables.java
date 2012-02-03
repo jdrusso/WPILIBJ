@@ -275,26 +275,44 @@ public class MetaTCPVariables {
                                 switch (i)
                                 {
                                     case 0: 
-                                        newVariableValue("range", temp);
+                                        //newVariableValue("range", temp);
                                         //synchronized (this) {
                                         this.range = f; 
                                         //}
                                         System.out.println("for loop " + i + " " + f + " " + this.range); 
                                         break;
                                     case 1: 
-                                        newVariableValue("x1", temp); 
+                                        //newVariableValue("x1", temp); 
                                         this.x1 = f; 
                                         break;
                                     case 2: 
-                                        newVariableValue("y1", temp); 
+                                        //newVariableValue("y1", temp); 
                                         this.y1 = f; 
                                         break;
-                                    case 3: newVariableValue("x2", temp); this.x2 = f; break;
-                                    case 4: newVariableValue("y2", temp); this.y2 = f; break;
-                                    case 5: newVariableValue("x3", temp); this.x3 = f; break;
-                                    case 6: newVariableValue("y3", temp); this.y3 = f; break;
-                                    case 7: newVariableValue("x4", temp); this.x4 = f; break;
-                                    case 8: newVariableValue("y4", temp); this.y4 = f; break;
+                                    case 3: 
+                                        //newVariableValue("x2", temp); 
+                                        this.x2 = f; 
+                                        break;
+                                    case 4: 
+                                        //newVariableValue("y2", temp); 
+                                        this.y2 = f; 
+                                        break;
+                                    case 5: 
+                                        //newVariableValue("x3", temp); 
+                                        this.x3 = f; 
+                                        break;
+                                    case 6: 
+                                        //newVariableValue("y3", temp); 
+                                        this.y3 = f; 
+                                        break;
+                                    case 7: 
+                                        newVariableValue("x4", temp); 
+                                        this.x4 = f; 
+                                        break;
+                                    case 8: 
+                                        newVariableValue("y4", temp); 
+                                        this.y4 = f; 
+                                        break;
                                 }
                             }
                         }
@@ -308,7 +326,7 @@ public class MetaTCPVariables {
                 // TBD: what to do?
                 System.out.println("update fail");
             }
-            }
+        }
             //}
         //}
         
