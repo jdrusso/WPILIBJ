@@ -39,6 +39,7 @@ public class MetaTCPVariables {
     Thread connect;
     ServerSocketConnection server;
     UDPDatagramConnection server2;
+    public double[] dataMessage = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     
     SocketConnection socket;
     
@@ -278,41 +279,41 @@ public class MetaTCPVariables {
                                     case 0: 
                                         //newVariableValue("range", temp);
                                         //synchronized (this) {
-                                        this.range = f; 
+                                        dataMessage[0] = f; 
                                         //}
                                         System.out.println("for loop " + i + " " + f + " " + this.range); 
                                         break;
                                     case 1: 
                                         //newVariableValue("x1", temp); 
-                                        this.x1 = f; 
+                                        dataMessage[1] = f; 
                                         break;
                                     case 2: 
                                         //newVariableValue("y1", temp); 
-                                        this.y1 = f; 
+                                        dataMessage[2] = f;
                                         break;
                                     case 3: 
                                         //newVariableValue("x2", temp); 
-                                        this.x2 = f; 
+                                        dataMessage[3] = f; 
                                         break;
                                     case 4: 
                                         //newVariableValue("y2", temp); 
-                                        this.y2 = f; 
+                                        dataMessage[4] = f; 
                                         break;
                                     case 5: 
                                         //newVariableValue("x3", temp); 
-                                        this.x3 = f; 
+                                        dataMessage[5] = f; 
                                         break;
                                     case 6: 
                                         //newVariableValue("y3", temp); 
-                                        this.y3 = f; 
+                                        dataMessage[6] = f; 
                                         break;
                                     case 7: 
-                                        newVariableValue("x4", temp); 
-                                        this.x4 = f; 
+                                        //newVariableValue("x4", temp); 
+                                        dataMessage[7] = f; 
                                         break;
                                     case 8: 
-                                        newVariableValue("y4", temp); 
-                                        this.y4 = f; 
+                                        //newVariableValue("y4", temp); 
+                                        dataMessage[8] = f; 
                                         break;
                                 }
                             }
