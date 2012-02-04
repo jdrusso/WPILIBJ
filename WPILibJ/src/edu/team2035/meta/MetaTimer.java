@@ -7,15 +7,35 @@
 
 package edu.team2035.meta;
 
-import edu.wpi.first.wpilibj.Jaguar;
-
+import edu.wpi.first.wpilibj.Timer;
 /**
- * 
- * @author Team 2035 Programmers
+ *
+ * @author abbottk
  */
-public class MetaJaguar extends Jaguar implements MetaObject {
-    public MetaJaguar (int channel){
-        super(channel);
-        Meta.addObject(this);
+public class MetaTimer {
+    
+    private Timer MetaCal;
+    private String name = "Timer";
+    
+    
+    public MetaTimer(){
+
+        MetaLog.addObject(this);
+        MetaCal = new Timer();
     }
+    
+     public String update() {
+         
+         return "" + MetaCal.get();
+        
+     }
+     
+     public String initialize() {
+         
+        MetaCal.start();
+        return name;
+    
+     }
+    
+    
 }

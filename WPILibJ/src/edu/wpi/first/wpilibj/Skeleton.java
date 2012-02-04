@@ -8,20 +8,29 @@
 package edu.wpi.first.wpilibj;
 
 /**
- *
+ * A Skeleton object to be used with Kinect data from the
+ * FRC Kinect server on the DriverStation
  * @author koconnor
  */
 public class Skeleton {
 
+    /**
+     * The TrackState of the skeleton
+     */
    public static class tTrackState{
+
+       /** The integer value representing this enumeration. */
         public final int value;
 
         protected static final int kNotTracked_val = 0;
         protected static final int kPositionOnly_val = 1;
         protected static final int kTracked_val = 2;
 
+        /** TrackState: Not Tracked */
         public static final tTrackState kNotTracked = new tTrackState(kNotTracked_val);
+        /** TrackState: Position Only */
         public static final tTrackState kPositionOnly = new tTrackState(kPositionOnly_val);
+        /** TrackState: Tracked */
         public static final tTrackState kTracked = new tTrackState(kTracked_val);
 
         private tTrackState(int value){
@@ -29,22 +38,32 @@ public class Skeleton {
         }
     }
 
+   /**
+    * The Joint TrackingState
+    */
    public static class tJointTrackingState{
-            public final int value;
+        /** The integer value representing this enumeration. */
+        public final int value;
 
-            protected static final int kNotTracked_val = 0;
-            protected static final int kInferred_val = 1;
-            protected static final int kTracked_val = 2;
+        protected static final int kNotTracked_val = 0;
+        protected static final int kInferred_val = 1;
+        protected static final int kTracked_val = 2;
 
-            public static final tJointTrackingState kNotTracked = new tJointTrackingState(kNotTracked_val);
-            public static final tJointTrackingState kInferred = new tJointTrackingState(kInferred_val);
-            public static final tJointTrackingState kTracked = new tJointTrackingState(kTracked_val);
+        /** Joint TrackingState: Not Tracked */
+        public static final tJointTrackingState kNotTracked = new tJointTrackingState(kNotTracked_val);
+        /** Joint TrackingState: Inferred */
+        public static final tJointTrackingState kInferred = new tJointTrackingState(kInferred_val);
+        /** Joint TrackingState: Tracked */
+        public static final tJointTrackingState kTracked = new tJointTrackingState(kTracked_val);
 
-            private tJointTrackingState(int value){
-                this.value = value;
-            }
+        private tJointTrackingState(int value){
+            this.value = value;
+        }
    }
 
+   /**
+    * An individual Joint from Kinect data
+    */
    public class Joint {
        protected float x, y, z;
        protected byte trackingState;
@@ -66,6 +85,9 @@ public class Skeleton {
        }
    }
 
+   /**
+    * Helper class used to index the joints in a (@link Skeleton)
+    */
    public static class tJointTypes{
             public final int value;
 

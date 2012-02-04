@@ -22,7 +22,7 @@ import java.util.Vector;
  * <p>It is fine if teams wish to take control of the {@link Scheduler} themselves, all that needs to be done
  * is to call {@link Scheduler#getInstance() Scheduler.getInstance()}.{@link Scheduler#run() run()} often
  * to have {@link Command Commands} function correctly.  However, this is already done for you if you
- * use the {@link edu.wpi.first.wpilibj.CommandBasedRobot CommandBasedRobot} class.</p>
+ * use the CommandBased Robot template.</p>
  *
  * @author Joe Grinstead
  * @see Command

@@ -7,7 +7,7 @@
 
 package edu.wpi.first.wpilibj.buttons;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID;
 
 /**
  *
@@ -15,15 +15,15 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class JoystickButton extends Button {
     
-    Joystick m_joystick;
+    GenericHID m_joystick;
     int m_buttonNumber;
 
     /**
      * Create a joystick button for triggering commands
-     * @param joystick The joystick object that has the button
-     * @param buttonNumber The button number (see {@link Joystick#getRawButton(int) }
+     * @param joystick The GenericHID object that has the button (e.g. Joystick, KinectStick, etc)
+     * @param buttonNumber The button number (see {@link GenericHID#getRawButton(int) }
      */
-    public JoystickButton(Joystick joystick, int buttonNumber) {
+    public JoystickButton(GenericHID joystick, int buttonNumber) {
         m_joystick = joystick;
         m_buttonNumber = buttonNumber;
     }
@@ -33,6 +33,8 @@ public class JoystickButton extends Button {
      * @return The value of the joystick button
      */
     public boolean get() {
+        
         return m_joystick.getRawButton(m_buttonNumber);
+    
     }
 }

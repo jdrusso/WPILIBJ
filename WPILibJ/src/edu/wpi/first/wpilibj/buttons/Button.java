@@ -7,6 +7,7 @@
 
 package edu.wpi.first.wpilibj.buttons;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -28,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboardData;
  */
 public abstract class Button implements SmartDashboardData {
 
+    private boolean pressedTwice;
     /**
      * Returns whether or not the button is pressed.
      *
@@ -43,6 +45,10 @@ public abstract class Button implements SmartDashboardData {
      */
     private boolean grab() {
         return get() || (table != null && table.isConnected() && table.getBoolean("pressed", false));
+    }
+    
+    public boolean getPressedTwice(){
+        return pressedTwice;
     }
 
     /**
@@ -93,6 +99,55 @@ public abstract class Button implements SmartDashboardData {
             }
         }.start();
     }
+    
+    public void whenDoublePressed(final Command command) {
+    new ButtonScheduler() {
+
+            boolean pressed = grab();
+           boolean released = false;
+           boolean releasedTwice = false;
+            private Timer time = new Timer();
+
+            public void execute() {
+                if (grab()){
+                    if(!pressed){
+                        pressed = true;
+                    }
+                    
+                    if(released){
+                        pressedTwice = true;
+                    }
+                    
+                    if (time.get() < 2 && releasedTwice) {
+                        pressedTwice = false;
+                        pressed = false;
+                        released = false;
+                        releasedTwice = false;
+                        time.stop();
+                        time.reset();
+                        command.start();
+                    }
+
+                }else{
+                    if(pressed){
+                        released = true;
+                        time.start();
+                    }
+                    if(pressedTwice){
+                        releasedTwice = true;
+                    }
+                    if(time.get() > 2 && (released || releasedTwice)){
+                        pressedTwice = false;
+                        released = false;
+                        time.stop();
+                        time.reset();
+                    }
+                }
+                
+            }
+        }.start();
+    }    
+    
 
     /**
      * Starts the command when the button is released
