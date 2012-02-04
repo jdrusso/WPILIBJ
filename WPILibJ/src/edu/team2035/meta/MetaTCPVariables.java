@@ -39,7 +39,7 @@ public class MetaTCPVariables {
     Thread connect;
     ServerSocketConnection server;
     UDPDatagramConnection server2;
-    public double[] dataMessage = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    public static double[] dataMessage = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     
     SocketConnection socket;
     
