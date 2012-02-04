@@ -279,7 +279,10 @@ public class MetaTCPVariables {
                                     case 0: 
                                         //newVariableValue("range", temp);
                                         //synchronized (this) {
-                                        dataMessage[0] = f; 
+                                        if (f < 5000)
+                                            dataMessage[0] = f;
+                                        else if (f > 5000)
+                                            dataMessage[0] = 0;
                                         //}
                                         System.out.println("for loop " + i + " " + f + " " + this.range); 
                                         break;
