@@ -176,15 +176,15 @@ public class RobotDrive implements MotorSafety, IUtility {
 		drive(0, 0);
     }
 
-    public String getLeftOutputs(){
+    public double getLeftOutputs(){
         
-        return "" + this.LeftSideOutput;
+        return LeftSideOutput;
 
     }
     
-    public String getRightOutputs(){
+    public double getRightOutputs(){
         
-        return "" + this.RightSideOutput;
+        return RightSideOutput;
 
     }
     
