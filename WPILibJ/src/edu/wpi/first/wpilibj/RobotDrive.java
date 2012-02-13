@@ -59,7 +59,7 @@ public class RobotDrive implements MotorSafety, IUtility {
             this.value = value;
         }
     }
-    public static final double kDefaultExpirationTime = 0.1;
+    public static final double kDefaultExpirationTime = 0.5;
     public static final double kDefaultSensitivity = 0.5;
     public static final double kDefaultMaxOutput = 1.0;
     protected static final int kMaxNumberOfMotors = 4;
