@@ -284,7 +284,7 @@ public class MetaTCPVariables {
                                         else if (f > 5000)
                                             dataMessage[0] = 0;
                                         //}
-                                        System.out.println("for loop " + i + " " + f + " " + this.range); 
+                                        System.out.println("for loop " + i + " " + f + " " + dataMessage[0]); 
                                         break;
                                     case 1: 
                                         //newVariableValue("x1", temp); 
