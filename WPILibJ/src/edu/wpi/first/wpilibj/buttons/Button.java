@@ -100,25 +100,27 @@ public abstract class Button implements SmartDashboardData {
         }.start();
     }
     
-    public void whenDoublePressed(final Command command) {
-    new ButtonScheduler() {
+    public void whenTriplePressed(final Command command) {
+        new ButtonScheduler()
+        {
 
-            boolean pressed = grab();
-           boolean released = false;
-           boolean releasedTwice = false;
+            //boolean pressed = grab();
+            boolean pressed = false;
+            boolean released = false;
+            boolean releasedTwice = false;
             private Timer time = new Timer();
 
             public void execute() {
-                if (grab()){
-                    if(!pressed){
+                if (grab()) {
+                    if(!pressed && !released) {
                         pressed = true;
                     }
-                    
-                    if(released){
+
+                    if(pressed && released) {
                         pressedTwice = true;
                     }
-                    
-                    if (time.get() < 2 && releasedTwice) {
+
+                    if (time.get() < .1 && releasedTwice) {
                         pressedTwice = false;
                         pressed = false;
                         released = false;
@@ -128,23 +130,24 @@ public abstract class Button implements SmartDashboardData {
                         command.start();
                     }
 
-                }else{
-                    if(pressed){
+                } else {
+                    if(pressed && !released){
                         released = true;
                         time.start();
                     }
                     if(pressedTwice){
                         releasedTwice = true;
                     }
-                    if(time.get() > 2 && (released || releasedTwice)){
+                    if(time.get() > .1 && (released || releasedTwice)){
+                        pressed = false;
                         pressedTwice = false;
                         released = false;
                         time.stop();
                         time.reset();
                     }
                 }
-                
-            }
+
+                }
         }.start();
     }    
     
