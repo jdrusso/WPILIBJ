@@ -60,6 +60,8 @@ public class Counter extends SensorBase implements CounterBase {
     private tCounter m_counter;				///< The FPGA counter object.
     private int m_index;					///< The index of this counter.
     private static Resource counters = new Resource(tCounter.kNumSystems);
+    private boolean m_upSourceRising;
+    private boolean m_downSourceRising;
 
     private void initCounter(final Mode mode) {
         m_allocatedUpSource = false;
@@ -75,6 +77,8 @@ public class Counter extends SensorBase implements CounterBase {
         m_counter.writeConfig_Mode(mode.value);
         m_upSource = null;
         m_downSource = null;
+        m_upSourceRising = true;
+        m_downSourceRising = true;
         m_counter.writeTimerConfig_AverageSize(1);
     }
 
@@ -159,10 +163,15 @@ public class Counter extends SensorBase implements CounterBase {
      * Create an instance of a simple up-Counter given an analog trigger.
      * Use the trigger state output from the analog trigger.
      * @param trigger the analog trigger to count
+     * @param upSourceRising true if upsource detects rising edges 
+     * @param downSourceRising true if downsource detects rising edges 
      */
-    public Counter(AnalogTrigger trigger) {
+    public Counter(AnalogTrigger trigger, boolean upSourceRising, boolean downSourceRising) {
         initCounter(Mode.kTwoPulse);
+        m_upSourceRising = upSourceRising;
+        m_downSourceRising = downSourceRising;
         setUpSource(trigger.createOutput(AnalogTriggerOutput.Type.kTypeState));
+        setDownSource(trigger.createOutput(AnalogTriggerOutput.Type.kTypeState));
     }
 
     public void free() {
@@ -215,7 +224,7 @@ public class Counter extends SensorBase implements CounterBase {
 
         if (m_counter.readConfig_Mode() == Mode.kTwoPulse.value ||
                 m_counter.readConfig_Mode() == Mode.kExternalDirection.value) {
-            setUpSourceEdge(true, false);
+            setUpSourceEdge(m_upSourceRising, !m_upSourceRising);
         }
         m_counter.strobeReset();
     }
@@ -303,7 +312,7 @@ public class Counter extends SensorBase implements CounterBase {
         m_counter.writeConfig_DownSource_Channel(source.getChannelForRouting());
         m_counter.writeConfig_DownSource_AnalogTrigger(source.getAnalogTriggerForRouting());
 
-        setDownSourceEdge(true, false);
+        setDownSourceEdge(m_downSourceRising, !m_downSourceRising);
         m_counter.strobeReset();
     }
 
