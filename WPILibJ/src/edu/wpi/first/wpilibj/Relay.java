@@ -251,6 +251,15 @@ public class Relay extends SensorBase implements IDeviceController{
     }
 
     /**
+     *
+     * @return 1 - forward, 2 - reverse
+     */
+    public int get()
+    {
+        return this.m_direction.value;
+    }
+
+    /**
      * Set the Relay Direction
      *
      * Changes which values the relay can be set to depending on which direction is
