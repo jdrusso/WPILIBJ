@@ -27,7 +27,7 @@ public class Jaguar extends SafePWM implements SpeedController, IDeviceControlle
          * Proportional forward ranges from 1.5517922ms to 2.3027789ms
          * Full forward ranges from 2.3027789ms to 2.328675ms
          */
-        setBounds(251, 135, 128, 120, 4);
+        setBounds(254, 135, 128, 120, 4);
         setPeriodMultiplier(PeriodMultiplier.k1X);
         setRaw(m_centerPwm);
     }
