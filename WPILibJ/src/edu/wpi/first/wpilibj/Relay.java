@@ -38,6 +38,8 @@ public class Relay extends SensorBase implements IDeviceController{
         }
     }
 
+    private int value;
+
     /**
      * The state to drive a Relay to.
      */
@@ -208,6 +210,8 @@ public class Relay extends SensorBase implements IDeviceController{
      * @param value The state to set the relay.
      */
     public void set(Value value) {
+        this.value = value.value;  // the state the Relay is in is remembered.
+
         switch (value.value) {
             case Value.kOff_val:
                 if (m_direction == Direction.kBoth || m_direction == Direction.kForward) {
@@ -252,11 +256,11 @@ public class Relay extends SensorBase implements IDeviceController{
 
     /**
      *
-     * @return 1 - forward, 2 - reverse
+     * @return 0 - off, 1 - on, 2 - forward, 3 - reverse
      */
     public int get()
     {
-        return this.m_direction.value;
+        return this.value;
     }
 
     /**
