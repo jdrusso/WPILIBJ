@@ -19,7 +19,7 @@ import java.util.Enumeration;
  */
 public class MetaLog {
     
-    private static Vector objects = new Vector( 20 , 1 );
+    private static Vector objects = new Vector( 30 , 1 );
     private static boolean MetaFileOpen = false;
     private static FileConnection MetaFile;
     private static OutputStream MetaOs;

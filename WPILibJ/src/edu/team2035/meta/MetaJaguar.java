@@ -14,8 +14,31 @@ import edu.wpi.first.wpilibj.Jaguar;
  * @author Team 2035 Programmers
  */
 public class MetaJaguar extends Jaguar implements MetaObject {
-    public MetaJaguar (int channel){
+    private String name;
+    
+    public MetaJaguar(final int channel, String n) {
         super(channel);
-        Meta.addObject(this);
+        name = n;
+    }
+
+    public Jaguar(final int slot, final int channel, String n) {
+        super(slot, channel);
+        name = n;
+    }
+    
+    public void addToLog(){        
+        MetaLog.addObject(this);
+    }
+    
+    public String initialize() {
+        
+         return name;
+    
+    }
+    
+    public String update(){
+        
+        return "" + get();
+        
     }
 }

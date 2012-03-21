@@ -20,11 +20,14 @@ public class MetaTimer {
     
     public MetaTimer(){
 
-        MetaLog.addObject(this);
         MetaCal = new Timer();
     }
     
-     public String update() {
+    public void assToLog(){
+        MetaLog.addObject(this);
+    }
+    
+    public String update() {
          
          return "" + MetaCal.get();
         

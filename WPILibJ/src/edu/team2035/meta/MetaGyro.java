@@ -14,13 +14,13 @@ import edu.wpi.first.wpilibj.Gyro;
  *
  * @author abbottk
  */
-public class MetaGyro extends Gyro{
+public class MetaGyro extends Gyro implements MetaObject{
     
-    private String name = "Gyro";
+    private String name;
     
-    public MetaGyro(int slot, int channel) {
+    public MetaGyro(int slot, int channel, String n) {
         super( slot, channel);
-        MetaLog.addObject(this);
+        name = n;
     }
 
     /**
@@ -30,9 +30,9 @@ public class MetaGyro extends Gyro{
      *
      * @param channel The analog channel the gyro is connected to.
      */
-    public MetaGyro(int channel) {
+    public MetaGyro(int channel, String n) {
         super( channel);
-        MetaLog.addObject(this);
+        name = n;
     }
     /**
      * Gyro constructor with a procreated analog channel object.
@@ -40,12 +40,15 @@ public class MetaGyro extends Gyro{
      * is no reference counting when an AnalogChannel is passed to the gyro.
      * @param channel The AnalogChannel object that the gyro is connected to.
      */
-    public MetaGyro(AnalogChannel channel) {
+    public MetaGyro(AnalogChannel channel, String n) {
         super( channel);
-        MetaLog.addObject(this);
-        }
+        name = n;
+    }
     
    
+    public void addToLog(){        
+        MetaLog.addObject(this);
+    }
     
     public String initialize() {
         
