@@ -13,10 +13,10 @@ package edu.team2035.meta;
  */
 interface MetaObject {
     
-    private abstract addToLog();
+    abstract void addToLog();
     
-    private abstract initialize();
+    abstract String initialize();
     
-    private abstract update();
+    abstract String update();
     
 }

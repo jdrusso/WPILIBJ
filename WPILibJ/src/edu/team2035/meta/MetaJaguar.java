@@ -21,7 +21,7 @@ public class MetaJaguar extends Jaguar implements MetaObject {
         name = n;
     }
 
-    public Jaguar(final int slot, final int channel, String n) {
+    public MetaJaguar(final int slot, final int channel, String n) {
         super(slot, channel);
         name = n;
     }

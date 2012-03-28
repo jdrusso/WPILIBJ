@@ -7,6 +7,8 @@
 
 package edu.team2035.meta;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Ultrasonic;
 
 /**
@@ -18,7 +20,7 @@ public class MetaUltrasonic extends Ultrasonic implements MetaObject {
     private String name;
     
     public MetaUltrasonic(final int pingChannel, final int echoChannel, Unit units, String n) {
-        super(pingChannel, echoChannel, units)
+        super(pingChannel, echoChannel, units);
         name = n;
     }
 

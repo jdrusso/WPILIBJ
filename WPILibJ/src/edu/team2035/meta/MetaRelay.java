@@ -53,16 +53,18 @@ public class MetaRelay extends Relay implements MetaObject{
         switch(get()){
             case(0):
                 return "Off";
-                break;
+
             case(1):
                 return "On";
-                break;
+
             case(2):
                 return "Forward";
-                break;
+
             case(3):
                 return "Reverse";
-                break;
-        
+
+        }        
+        return "null";
+    
     }
 }
